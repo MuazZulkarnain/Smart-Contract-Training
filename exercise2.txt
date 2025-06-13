@@ -1,0 +1,57 @@
+// Start
+
+// - minimal
+// - decentralized voting
+
+// -> owner to add candidate
+// -> user can only vote once
+// -> anyone query candidate details and vote counts
+
+
+contract Distributed_Voting {
+
+modifier onlyOwner() {
+    require(msg.sender == owner);
+    _;
+}
+
+mapping(address => bool) public hasCalled;
+bool public votingOngoing;
+
+modifier onlyOnce() {
+        require(!hasCalled[msg.sender], "Function can only be called once per address");
+        hasCalled[msg.sender] = true;
+        _;
+    }
+
+ struct candidateInfo {
+    string name
+    string details
+    uint256 voteCount = 0
+   }
+
+mapping(uint256 => candidateInfo) candidate;
+uint256[] public candidateIds;
+
+function addCandidate (string name, string details, uint256 voteCount) onlyOwner {
+    candidateInfo storage newCandidate = candidates[id];
+    newCandidate.name = name;
+    newCandidate.details = details;
+    newCandidate.voteCount = voteCount;
+}
+
+function voteCandidate (uint256 candidateIds, bool votingOngoing) onlyOnce {
+    candidateInfo storage s = candidates[id];
+    s.voteCount ++;
+}
+
+function getCandidate (uint256 candidateIds) public view returns {
+    candidateInfo storage s = candidates[id];
+    return (s.name, s.details, s.voteCount);
+}
+
+function stopVoting (bool votingOngoing) returns (bool votingOngoing) onlyOwner {
+    votingOngoing = false;
+}
+
+}
